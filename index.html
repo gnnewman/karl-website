@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Karl's Corner</title>
+<meta name="description" content="A little hub for updates, love, and visits with Karl." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     DESIGN TOKENS — coastal "by the sea" identity
+     Primary: ocean blue (calm, open water) · Accent: sunset coral
+     Background: warm shell sand · Tint: pale sea-glass
+     ============================================================ */
+  :root{
+    --shell:#F6F4EC;        /* page background (warm shell sand) */
+    --shell-2:#EDF1F0;      /* faint cool sand for alt areas    */
+    --sea:#2E7BA6;          /* primary ocean blue               */
+    --deep:#1E5573;         /* deep sea — headings & emphasis    */
+    --foam:#E2EEF1;         /* pale sea-glass tint              */
+    --foam-line:#CFE2E5;    /* sea-glass border                 */
+    --coral:#E0875A;        /* sunset coral accent (sparingly)  */
+    --coral-soft:#F7E3D4;   /* pale shell-coral                 */
+    --spotify:#1DB954;      /* Spotify brand green (leave as-is)*/
+    --ink:#293940;          /* deep blue-charcoal text          */
+    --muted:#6C7B81;        /* captions / secondary text        */
+    --card:#FFFFFF;
+    --line:#DEE5E4;         /* cool hairline                    */
+    --shadow:0 1px 2px rgba(30,85,115,.05), 0 8px 24px rgba(30,85,115,.07);
+    --shadow-lift:0 2px 4px rgba(30,85,115,.06), 0 14px 34px rgba(30,85,115,.12);
+    --radius:18px;
+    --radius-sm:12px;
+    --maxw:980px;
+    --font-display:'Newsreader', Georgia, 'Times New Roman', serif;
+    --font-body:'Nunito Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --font-hand:'Caveat', 'Comic Sans MS', cursive;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--shell);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* soft sky-to-sea wash */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(1000px 560px at 12% -10%, rgba(46,123,166,.12), transparent 60%),
+      radial-gradient(720px 460px at 100% 0%, rgba(224,135,90,.08), transparent 55%),
+      radial-gradient(900px 480px at 50% 116%, rgba(46,123,166,.07), transparent 60%);
+  }
+
+  a{color:var(--deep);text-underline-offset:3px;}
+  img{max-width:100%;display:block;}
+
+  .skip{position:absolute;left:-999px;top:0;background:var(--deep);color:#fff;padding:10px 16px;border-radius:0 0 10px 0;z-index:100;}
+  .skip:focus{left:0;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;}
+
+  /* ---------- header / nav ---------- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,244,236,.86);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 22px;max-width:var(--maxw);margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:11px;border:0;background:none;cursor:pointer;padding:0;}
+  .brand .mark{width:32px;height:32px;flex:none;}
+  .brand b{font-family:var(--font-display);font-weight:600;font-size:1.32rem;color:var(--deep);letter-spacing:.2px;line-height:1;}
+  .brand span{display:block;font-family:var(--font-hand);font-size:1rem;color:var(--coral);line-height:1;margin-top:1px;}
+  .menu{display:flex;gap:6px;}
+  .menu a{
+    font-weight:700;font-size:.98rem;text-decoration:none;color:var(--muted);
+    padding:9px 14px;border-radius:999px;transition:background .18s,color .18s;white-space:nowrap;
+  }
+  .menu a:hover{color:var(--deep);background:var(--foam);}
+  .menu a.active{color:#fff;background:var(--sea);}
+
+  /* ---------- sections (single-page views) ---------- */
+  main > section{display:none;animation:rise .5s ease both;}
+  main > section.is-active{display:block;}
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  .eyebrow{
+    font-family:var(--font-body);font-weight:800;font-size:.74rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--coral);margin:0 0 10px;
+  }
+  h1,h2,h3{font-family:var(--font-display);color:var(--deep);font-weight:500;line-height:1.15;margin:0 0 .4em;}
+  h1{font-size:clamp(2.1rem,5.4vw,3.1rem);}
+  h2{font-size:clamp(1.6rem,3.6vw,2.15rem);}
+  h3{font-size:1.25rem;color:var(--ink);}
+  p{margin:0 0 1em;}
+
+  /* ---------- HOME: hero ---------- */
+  .hero{padding:46px 0 14px;}
+  .hero-grid{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;}
+  .portrait{
+    position:relative;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow-lift);padding:14px 14px 18px;
+    transform:rotate(-1.4deg);
+  }
+  .portrait .frame{
+    aspect-ratio:4/5;border-radius:10px;overflow:hidden;
+    background:linear-gradient(160deg,#dcebef 0%,#e7f1f3 100%);
+    background:linear-gradient(160deg,#d7e7ef 0%,#eaf3f4 100%);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  .portrait .frame img{width:100%;height:100%;object-fit:cover;}
+  .portrait .ph{color:var(--sea);padding:18px;}
+  .portrait .ph svg{width:46px;height:46px;opacity:.75;margin:0 auto 8px;}
+  .portrait .ph small{display:block;font-weight:700;color:var(--muted);font-size:.82rem;}
+  .portrait .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:var(--coral);box-shadow:inset 0 -2px 3px rgba(0,0,0,.18),0 2px 4px rgba(0,0,0,.2);}
+  .portrait figcaption{font-family:var(--font-hand);text-align:center;color:var(--muted);font-size:1.18rem;margin-top:8px;}
+
+  .greeting{font-family:var(--font-hand);font-size:1.5rem;color:var(--coral);margin:0 0 2px;}
+  .hero h1{margin-bottom:.25em;}
+  .lede{font-size:1.12rem;color:#3f4f55;max-width:48ch;}
+
+  /* spotify player */
+  .player{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);
+    box-shadow:var(--shadow);padding:14px;margin-top:16px;max-width:520px;
+  }
+  .player-head{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .player-head .disc{width:46px;height:46px;border-radius:10px;background:var(--spotify);display:grid;place-items:center;flex:none;}
+  .player-head .disc svg{width:26px;height:26px;}
+  .player-head b{display:block;font-size:1rem;color:var(--deep);}
+  .player-head small{color:var(--muted);font-weight:600;}
+  .player-body iframe{display:block;width:100%;border:0;border-radius:12px;}
+  .player-empty{color:var(--muted);font-style:italic;font-size:.95rem;padding:8px 2px;margin:0;}
+
+  /* wave divider (signature motif) */
+  .wave-divider{display:block;width:100%;height:34px;margin:26px 0 0;color:var(--sea);opacity:.5;}
+
+  /* ---------- HOME: updates feed ---------- */
+  .feed{padding:6px 0 60px;}
+  .feed-head{display:flex;align-items:baseline;gap:14px;margin:26px 0 6px;}
+  .feed-head h2{margin:0;}
+  .feed-head .count{font-weight:700;color:var(--muted);font-size:.9rem;}
+  .rule{height:1px;background:var(--line);border:0;margin:14px 0 26px;}
+
+  .cards{display:grid;gap:18px;}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sea);
+    border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);
+  }
+  .card .meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .card .date{
+    font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--deep);background:var(--foam);padding:4px 10px;border-radius:999px;
+  }
+  .card .mood{font-family:var(--font-hand);font-size:1.2rem;color:var(--coral);line-height:1;}
+  .card h3{font-family:var(--font-display);color:var(--deep);font-weight:500;font-size:1.3rem;margin:.1em 0 .3em;}
+  .card p{margin:0;color:#3f4a4f;}
+  .card p + p{margin-top:.7em;}
+  .empty{color:var(--muted);font-style:italic;padding:24px 0;}
+
+  /* ---------- ABOUT (What is LP) ---------- */
+  .page{padding:42px 0 64px;max-width:760px;}
+  .page .lede{font-size:1.18rem;color:#3f4a4f;margin-bottom:8px;}
+  .page h2{margin-top:1.5em;}
+  .page h2:first-of-type{margin-top:.6em;}
+  .page ul{padding-left:1.1em;margin:0 0 1em;}
+  .page li{margin-bottom:.45em;}
+  .callout{
+    background:var(--foam);border:1px solid var(--foam-line);border-radius:var(--radius);
+    padding:18px 22px;margin:22px 0;
+  }
+  .callout p:last-child{margin-bottom:0;}
+  .callout strong{color:var(--deep);}
+  .links{display:grid;gap:12px;margin:18px 0 6px;}
+  .reslink{
+    display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px 16px;box-shadow:var(--shadow);transition:transform .16s,box-shadow .16s,border-color .16s;
+  }
+  .reslink:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:var(--foam-line);}
+  .reslink .dot{width:40px;height:40px;border-radius:10px;background:var(--foam);display:grid;place-items:center;flex:none;}
+  .reslink .dot svg{width:22px;height:22px;color:var(--sea);}
+  .reslink b{display:block;color:var(--deep);font-size:1.02rem;}
+  .reslink small{color:var(--muted);font-weight:600;}
+  .disclaimer{font-size:.92rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;margin-top:30px;}
+
+  /* ---------- VISIT ---------- */
+  .visit-intro{max-width:680px;}
+  .steps{list-style:none;counter-reset:step;padding:0;margin:26px 0 8px;display:grid;gap:14px;max-width:620px;}
+  .steps li{
+    counter-increment:step;display:flex;gap:15px;align-items:flex-start;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px 18px;box-shadow:var(--shadow);
+  }
+  .steps li::before{
+    content:counter(step);flex:none;width:34px;height:34px;border-radius:50%;
+    background:var(--coral-soft);color:var(--coral);font-weight:800;font-size:1.05rem;
+    display:grid;place-items:center;margin-top:1px;
+  }
+  .steps b{display:block;color:var(--deep);font-size:1.05rem;}
+  .steps span{color:#46535a;font-size:.97rem;}
+
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:11px;margin:16px 0 6px;
+    font-family:var(--font-body);font-weight:800;font-size:1.08rem;color:#fff;text-decoration:none;
+    background:var(--sea);border:0;border-radius:13px;padding:16px 26px;cursor:pointer;
+    box-shadow:var(--shadow);transition:background .18s, transform .12s, box-shadow .18s;
+  }
+  .cta-btn:hover{background:var(--deep);transform:translateY(-2px);box-shadow:var(--shadow-lift);}
+  .cta-btn:active{transform:translateY(0);}
+  .cta-btn svg{width:21px;height:21px;}
+  .cta-btn.off{background:var(--muted);cursor:default;pointer-events:none;opacity:.85;}
+  .visit-note{font-size:.95rem;color:var(--muted);max-width:560px;}
+  .formnote{font-size:.9rem;color:#9a5a2c;background:var(--coral-soft);border:1px solid #eccdb6;border-radius:10px;padding:12px 16px;margin:8px 0 4px;max-width:620px;display:none;}
+  .formnote.show{display:block;}
+  .formnote b{color:#824519;}
+
+  /* ---------- footer ---------- */
+  footer.site{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);text-align:center;}
+  footer.site .mark{width:30px;height:30px;margin:0 auto 8px;}
+  footer.site p{margin:0;font-size:.9rem;}
+  footer.site .hand{font-family:var(--font-hand);font-size:1.25rem;color:var(--coral);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:760px){
+    body{font-size:17px;}
+    .nav{padding:10px 16px;flex-wrap:wrap;}
+    .brand b{font-size:1.18rem;}
+    .menu{width:100%;justify-content:center;gap:4px;}
+    .menu a{padding:8px 12px;font-size:.9rem;}
+    .hero-grid{grid-template-columns:1fr;gap:26px;}
+    .portrait{max-width:280px;margin:0 auto;transform:rotate(-1deg);}
+    .wrap{padding:0 16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav class="nav" aria-label="Main">
+    <button class="brand" data-go="home" aria-label="Go to home">
+      <!-- sun over waves -->
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="8" r="3.4" fill="#E0875A"/>
+        <path d="M2 15.2c1.8 0 1.8-1.5 3.6-1.5s1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5 1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5" stroke="#2E7BA6" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M2 19.2c1.8 0 1.8-1.5 3.6-1.5s1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5 1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5" stroke="#5AA7C4" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span style="text-align:left">
+        <b>Karl's Corner</b>
+        <span>updates · love · visits</span>
+      </span>
+    </button>
+    <div class="menu">
+      <a href="#home" data-go="home" class="active">Home</a>
+      <a href="#about" data-go="about">What is LP?</a>
+      <a href="#visit" data-go="visit">Schedule a Visit</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============================== HOME ============================== -->
+  <section id="home" class="is-active">
+    <div class="wrap hero">
+      <div class="hero-grid">
+        <figure class="portrait">
+          <span class="pin"></span>
+          <div class="frame" id="portraitFrame">
+            <!-- TO ADD KARL'S PHOTO: replace this whole .ph block with:
+                 <img src="karl.jpg" alt="Karl" />
+                 (put karl.jpg in the same folder as this file) -->
+                 <img src="karl.jpg" alt="Karl" />
+            <!-- <div class="ph">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <small>Karl's photo<br>goes here</small>
+            </div> -->
+          </div>
+          <figcaption>our Karl</figcaption>
+        </figure>
+
+        <div class="hero-copy">
+          <p class="greeting">Hi friends &amp; family —</p>
+          <h1 id="homeHeading">Welcome to Karl's Corner</h1>
+          <!-- EDIT THIS SHORT DESCRIPTION any time -->
+          <p class="lede" id="homeDescription">
+            This is a hub for updates about Karl. We share how he is
+            doing here so we don't lose anyone in a sea of texts, you can read about
+            what he's facing, and you can request a time to come sit with him. Thank
+            you for your continued support.
+          </p>
+
+          <!-- SPOTIFY: the playlist embed is set in CONFIG below -->
+          <div class="player">
+            <div class="player-head">
+              <span class="disc">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 18V6l9-2v12" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/></svg>
+              </span>
+              <span>
+                <b>Karl's playlist</b>
+                <small>The songs he loves — give a listen</small>
+              </span>
+            </div>
+            <div id="spotifyMount" class="player-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <svg class="wave-divider" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 24 C 150 8, 300 8, 450 24 S 750 40, 900 24 S 1200 8, 1200 24" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M0 30 C 150 16, 300 16, 450 30 S 750 44, 900 30 S 1200 16, 1200 30" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+      </svg>
+    </div>
+
+    <div class="wrap feed">
+      <div class="feed-head">
+        <h2>Daily updates</h2>
+        <span class="count" id="updateCount"></span>
+      </div>
+      <hr class="rule" />
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <!-- ============================== ABOUT / WHAT IS LP ============================== -->
+  <section id="about">
+    <div class="wrap page">
+      <p class="eyebrow">Understanding the diagnosis</p>
+      <h1>What is leptomeningeal disease?</h1>
+      <p class="lede">
+        A lot of people have asked what Karl is facing, so we've developed an "FAQ" on his condition here.
+      </p>
+
+      <h2>The short version</h2>
+      <p>
+        Leptomeningeal disease (LMD) is when cancer cells reach the <strong>leptomeninges</strong>,
+        the thin layers of tissue that wrap around the brain and spinal cord, and the
+        cerebrospinal fluid (CSF) that flows around them.
+      </p>
+      <p>
+        Because that fluid circulates everywhere the brain and spine reach, the disease
+        can touch many areas at once. That's why symptoms can seem scattered or change
+        from week to week — headaches, nausea, trouble with balance or walking, double
+        vision, hearing changes, weakness, numbness, or moments of confusion.
+      </p>
+
+      <h2>How Karl developed LMD</h2>
+      <p>
+        In Karl's case, it came from his <strong>non-Hodgkin lymphoma</strong>. His
+        lymphoma spread to his leptomeninges, the layers of tissue surrounding the brain and spinal cord. The lining around the brain is partly shielded
+        by the blood-brain barrier. Because that barrier protects the brain,
+        this area is very hard for treatments to reach, which is part of what
+        makes LMD so difficult.
+      </p>
+      <p>
+        It's usually found with an MRI of the brain and spine (with contrast dye) and a
+        spinal tap (lumbar puncture), where a small sample of the spinal fluid is checked
+        for cancer cells.
+      </p>
+
+      <h2>The course of the disease</h2>
+      <p>
+        LMD is considered an advanced stage of cancer. It tends to affect several parts
+        of the nervous system, and the day-to-day picture can shift. Because of that,
+        care usually focuses on <strong>comfort, dignity, and quality of life</strong> —
+        easing specific symptoms rather
+        than aiming for a cure.
+      </p>
+
+      <div class="callout">
+        <p><strong>Prognosis</strong></p>
+        <p>
+          LMD is serious, and survival is often measured in weeks to months. We are choosing to be present at home, keep him comfortable, and make the time we have as fulfilling as possible.
+        </p>
+      </div>
+
+      <h2>What hospice means for us</h2>
+      <p>
+        Karl's hospice team helps manage pain and symptoms,
+        supports him at home, and supports our whole family. It lets us spend our
+        energy on being <em>with</em> him.
+      </p>
+
+      <h2>Learn more</h2>
+      <div class="links">
+        <a class="reslink" href="https://lmcancer.org/" target="_blank" rel="noopener">
+          <span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="11" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg></span>
+          <span><b>Leptomeningeal Cancer Foundation</b><small>lmcancer.org — awareness, education &amp; support</small></span>
+        </a>
+        <a class="reslink" href="https://lmcancer.org/palliative-and-hospice-care/" target="_blank" rel="noopener">
+          <span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+          <span><b>Palliative &amp; hospice care</b><small>Understanding comfort-focused care</small></span>
+        </a>
+      </div>
+
+      <p class="disclaimer">
+        We want to do our best to keep everyone informed, but we are not medical experts. This information was aggregated from what we know about Karl's condition.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================== VISIT ============================== -->
+  <section id="visit">
+    <div class="wrap page">
+      <p class="eyebrow">Request a visit</p>
+      <h1>Schedule a visit with Karl</h1>
+      <div class="visit-intro">
+        <p class="lede">
+          Karl enjoys visits, but to keep his days restful, we welcome
+          <strong>one visit per day</strong>. Our sign-up page shows which days are open
+          — pick one that works for you, and we'll see you there.
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li><div><b>Open the visit sign-up</b><span>It opens in a new tab. No account or password needed.</span></div></li>
+        <li><div><b>Pick an open day</b><span>Each day holds just one visit. Taken days are marked, so you'll always see what's free.</span></div></li>
+        <li><div><b>Add your name &amp; phone number</b><span>You'll be asked for your <strong>number of guests</strong> and your <strong>relationship to Karl</strong>, too. We'll confirm with you.</span></div></li>
+      </ol>
+
+      <div class="formnote" id="formnote">
+        <b>Almost ready:</b> the visit sign-up isn't linked yet. Paste your booking link
+        in the file (see the setup note) to turn this button on.
+      </div>
+
+      <a class="cta-btn" id="signupBtn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="16" rx="2.5" stroke="#fff" stroke-width="1.7"/><path d="M4 9h16M8 3v4M16 3v4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><path d="M9 14.5l2 2 4-4.5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open the visit sign-up
+      </a>
+
+      <p class="visit-note">
+        Prefer to arrange it personally, or don't see an open day? Just text or call Mercedes (951-218-3108) or Grace (951-235-5087)
+         and we'll find a time together. Thank you for your patience and love.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="8" r="3.4" fill="#E0875A"/>
+    <path d="M2 15.2c1.8 0 1.8-1.5 3.6-1.5s1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5 1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5" stroke="#2E7BA6" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+    <path d="M2 19.2c1.8 0 1.8-1.5 3.6-1.5s1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5 1.8 1.5 3.6 1.5 1.8-1.5 3.6-1.5" stroke="#5AA7C4" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  </svg>
+  <p class="hand">made with love for Karl</p>
+  <p style="margin-top:4px;">a private family page · please keep visits gentle and brief</p>
+</footer>
+
+<script>
+/* ================================================================
+   ⭐  EVERYTHING YOU'LL EDIT IS IN THIS TOP SECTION.  ⭐
+   ================================================================ */
+
+/* ---- 1) BASIC SETTINGS ---- */
+const CONFIG = {
+  // Karl's Spotify playlist (the "embed" link). To change it later: in Spotify,
+  // open the playlist → Share → Embed playlist → copy the src link out of the code.
+  spotifyEmbedUrl: "https://open.spotify.com/embed/playlist/75olQmti75toRXl4Fowu94?utm_source=generator",
+
+  // Visit booking link (Calendly). Works with Calendly, Cal.com, or any booking page.
+  visitSignupUrl: "https://calendly.com/gnnewman2003/visit-with-karl"
+};
+
+/* ---- 2) DAILY UPDATES ----
+   To add today's update, copy one block and paste it at the TOP of the list.
+   Newest stays on top automatically (it sorts by date).
+   - date: "YYYY-MM-DD"
+   - title: a short headline (or "")
+   - mood: a tiny word/emoji shown in the corner (or "")
+   - body: write as many paragraphs as you like, separated by  |
+*/
+const UPDATES = [
+  {
+    date: "2026-06-17",
+    title: "A good morning",
+    mood: "peaceful 🌊",
+    body: "Dad slept well and woke up asking for coffee and the newspaper — a very Karl thing to do. | The nurse came by at ten and he was in good spirits, cracking his usual jokes. We sat by the window for a while and listened to his playlist. | Thank you all for the cards. We read every one to him."
+  },
+  {
+    date: "2026-06-16",
+    title: "Settling in at home",
+    mood: "grateful",
+    body: "We got Dad comfortable at home today with the hospice team's help. He's resting more, but lit right up when the grandkids called. | If you'd like to visit, please use the Schedule a Visit page so we can keep his days calm. One visit a day keeps him from getting too tired."
+  }
+];
+
+/* ================================================================
+   You usually won't need to touch anything below this line.
+   ================================================================ */
+
+/* ---------- view switching ---------- */
+const sections = document.querySelectorAll('main > section');
+const navLinks = document.querySelectorAll('.menu a');
+function go(id){
+  if(!document.getElementById(id)) id = 'home';
+  sections.forEach(s => s.classList.toggle('is-active', s.id === id));
+  navLinks.forEach(a => a.classList.toggle('active', a.dataset.go === id));
+  if(location.hash.slice(1) !== id) history.replaceState(null,'','#'+id);
+  window.scrollTo({top:0, behavior:'auto'});
+}
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click', e=>{ e.preventDefault(); go(el.dataset.go); });
+});
+window.addEventListener('hashchange', ()=> go(location.hash.slice(1) || 'home'));
+
+/* ---------- spotify player ---------- */
+(function(){
+  const mount = document.getElementById('spotifyMount');
+  if(!mount) return;
+  if(CONFIG.spotifyEmbedUrl){
+    const f = document.createElement('iframe');
+    f.src = CONFIG.spotifyEmbedUrl;
+    f.width = '100%';
+    f.height = '352';
+    f.style.borderRadius = '12px';
+    f.setAttribute('frameborder','0');
+    f.setAttribute('loading','lazy');
+    f.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+    f.setAttribute('allowfullscreen','');
+    f.title = "Karl's playlist on Spotify";
+    mount.appendChild(f);
+  } else {
+    mount.innerHTML = '<p class="player-empty">Playlist coming soon.</p>';
+  }
+})();
+
+/* ---------- render updates ---------- */
+(function(){
+  const wrap = document.getElementById('cards');
+  const count = document.getElementById('updateCount');
+  const posts = [...UPDATES].sort((a,b)=> (a.date < b.date ? 1 : -1));
+  count.textContent = posts.length ? posts.length + (posts.length===1?' entry':' entries') : '';
+  if(!posts.length){
+    wrap.innerHTML = '<p class="empty">No updates yet — check back soon.</p>';
+    return;
+  }
+  const fmt = iso=>{
+    const [y,m,d] = iso.split('-').map(Number);
+    return new Date(y, m-1, d).toLocaleDateString('en-US',
+      {weekday:'long', month:'long', day:'numeric'});
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  wrap.innerHTML = posts.map(p=>{
+    const paras = String(p.body||'').split('|').map(t=>t.trim()).filter(Boolean)
+                   .map(t=>`<p>${esc(t)}</p>`).join('');
+    return `<article class="card">
+      <div class="meta">
+        <span class="date">${fmt(p.date)}</span>
+        ${p.mood ? `<span class="mood">${esc(p.mood)}</span>` : ''}
+      </div>
+      ${p.title ? `<h3>${esc(p.title)}</h3>` : ''}
+      ${paras}
+    </article>`;
+  }).join('');
+})();
+
+/* ---------- visit button (SignUpGenius) ---------- */
+(function(){
+  const btn = document.getElementById('signupBtn');
+  const note = document.getElementById('formnote');
+  if(CONFIG.visitSignupUrl){
+    btn.href = CONFIG.visitSignupUrl;
+  } else {
+    btn.classList.add('off');
+    btn.setAttribute('aria-disabled','true');
+    btn.addEventListener('click', e=> e.preventDefault());
+    note.classList.add('show');
+  }
+})();
+
+/* ---------- open to the right view on load ---------- */
+go(location.hash.slice(1) || 'home');
+</script>
+</body>
+</html>
